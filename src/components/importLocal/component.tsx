@@ -8,8 +8,6 @@ import { Trans } from "react-i18next";
 import Dropzone from "react-dropzone";
 import { ImportLocalProps, ImportLocalState } from "./interface";
 import RecordRecent from "../../utils/readUtils/recordRecent";
-import axios from "axios";
-import { config } from "../../constants/driveList";
 import MobiFile from "../../utils/mobiUtil";
 import iconv from "iconv-lite";
 import { isElectron } from "react-device-detect";
@@ -27,6 +25,7 @@ class ImportLocal extends React.Component<ImportLocalProps, ImportLocalState> {
     super(props);
     this.state = {
       isOpenFile: false,
+      width: document.body.clientWidth,
     };
   }
   componentDidMount() {
@@ -39,9 +38,7 @@ class ImportLocal extends React.Component<ImportLocalProps, ImportLocalState> {
           ipcRenderer.sendSync("storage-location", "ping")
         );
       var filePath = ipcRenderer.sendSync("get-file-data");
-      if (filePath === null || filePath === ".") {
-        console.log("There is no file");
-      } else {
+      if (filePath && filePath !== ".") {
         // Do something with the file.
         fetch(filePath)
           .then((response) => response.body)
@@ -79,6 +76,9 @@ class ImportLocal extends React.Component<ImportLocalProps, ImportLocalState> {
           .catch((err) => console.error(err));
       }
     }
+    window.addEventListener("resize", () => {
+      this.setState({ width: document.body.clientWidth });
+    });
   }
 
   handleJump = (book: BookModel) => {
@@ -130,7 +130,7 @@ class ImportLocal extends React.Component<ImportLocalProps, ImportLocalState> {
   };
   //获取书籍md5
   doIncrementalTest = (file: any) => {
-    let extension = file.name.split(".")[file.name.split(".").length - 1];
+    let extension = file.name.split(".").reverse()[0];
     this.props.handleLoadingDialog(true);
     if (
       !isElectron &&
@@ -187,7 +187,7 @@ class ImportLocal extends React.Component<ImportLocalProps, ImportLocalState> {
     });
   };
   handleBook = (file: any, md5: string) => {
-    let extension = file.name.split(".")[file.name.split(".").length - 1];
+    let extension = file.name.split(".").reverse()[0];
     let bookName = file.name.substr(0, file.name.length - extension.length - 1);
     return new Promise<void>((resolve, reject) => {
       //md5重复不导入
@@ -306,35 +306,18 @@ class ImportLocal extends React.Component<ImportLocalProps, ImportLocalState> {
             };
             reader.readAsArrayBuffer(file);
           } else if (extension === "txt") {
-            let formData = new FormData();
-            formData.append("file", file);
-            axios
-              .post(`${config.token_url}/ebook_parser`, formData, {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-                responseType: "blob",
-              })
-              .then((res) => {
-                console.log(res, "res");
-                let type = "application/octet-stream";
-                let blobTemp: any = new Blob([res.data], { type: type });
-                let fileTemp = new File([blobTemp], bookName + ".epub", {
-                  lastModified: new Date().getTime(),
-                  type: blobTemp.type,
-                });
-
-                this.doIncrementalTest(fileTemp);
-              })
-              .catch((err) => {
-                this.props.handleMessage("Import Failed");
-                this.props.handleMessageBox(true);
-                console.log(err, "Error occurs");
-                setTimeout(() => {
-                  this.props.handleLoadingDialog(false);
-                }, 1000);
-                reject();
-              });
+            console.log(file, "import");
+            let result = await BookUtil.parseBook(file);
+            if (result) {
+              this.doIncrementalTest(result);
+            } else {
+              this.props.handleMessage("Import Failed");
+              this.props.handleMessageBox(true);
+              setTimeout(() => {
+                this.props.handleLoadingDialog(false);
+              }, 1000);
+              reject();
+            }
           } else {
             let cover: any = "";
             const epub = window.ePub(e.target.result);
@@ -493,7 +476,7 @@ class ImportLocal extends React.Component<ImportLocalProps, ImportLocalState> {
             }
           >
             <div className="animation-mask-local"></div>
-            {this.props.isCollapsed && document.body.clientWidth < 950 ? (
+            {this.props.isCollapsed && this.state.width < 950 ? (
               <span className="icon-export"></span>
             ) : (
               <span>

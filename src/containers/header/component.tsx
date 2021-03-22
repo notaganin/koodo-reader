@@ -6,7 +6,7 @@ import ImportLocal from "../../components/importLocal";
 import { Trans } from "react-i18next";
 import { HeaderProps, HeaderState } from "./interface";
 import OtherUtil from "../../utils/otherUtil";
-import UpdateInfo from "../../components/updateInfo";
+import UpdateInfo from "../../components/dialogs/updateInfo";
 import RestoreUtil from "../../utils/syncUtils/restoreUtil";
 import BackupUtil from "../../utils/syncUtils/backupUtil";
 
@@ -19,6 +19,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
       isOnlyLocal: false,
       language: OtherUtil.getReaderConfig("lang"),
       isNewVersion: false,
+      width: document.body.clientWidth,
     };
   }
   handleSortBooks = () => {
@@ -32,6 +33,30 @@ class Header extends React.Component<HeaderProps, HeaderState> {
     if (isElectron) {
       const fs = window.require("fs");
       const path = window.require("path");
+      const request = window.require("request");
+      const { remote, app } = window.require("electron");
+      const configDir = (app || remote.app).getPath("userData");
+      const dirPath = path.join(configDir, "uploads");
+      if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath);
+        fs.mkdirSync(path.join(dirPath, "data"));
+        fs.mkdirSync(path.join(dirPath, "data", "book"));
+        console.log("文件夹创建成功");
+      } else {
+        console.log("文件夹已存在");
+      }
+      if (!fs.existsSync(path.join(dirPath, `cover.png`))) {
+        let stream = fs.createWriteStream(path.join(dirPath, `cover.png`));
+        request(`https://koodo.960960.xyz/images/splash.png`)
+          .pipe(stream)
+          .on("close", function (err) {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log("文件下载完毕");
+            }
+          });
+      }
       const { zip } = window.require("zip-a-folder");
       let storageLocation = OtherUtil.getReaderConfig("storageLocation")
         ? OtherUtil.getReaderConfig("storageLocation")
@@ -65,6 +90,9 @@ class Header extends React.Component<HeaderProps, HeaderState> {
           true
         );
     }
+    window.addEventListener("resize", () => {
+      this.setState({ width: document.body.clientWidth });
+    });
   }
   render() {
     return (
@@ -105,7 +133,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
           }
         >
           <div className="animation-mask"></div>
-          {this.props.isCollapsed && document.body.clientWidth < 950 ? (
+          {this.props.isCollapsed && this.state.width < 950 ? (
             <span
               className="icon-clockwise"
               style={{ fontSize: "20px" }}

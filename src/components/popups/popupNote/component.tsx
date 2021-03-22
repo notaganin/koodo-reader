@@ -42,7 +42,6 @@ class PopupNote extends React.Component<PopupNoteProps, PopupNoteState> {
         this.props.handleFetchNotes();
         this.props.handleMenuMode("highlight");
         this.props.handleNoteKey("");
-        console.log("edit");
       });
     } else {
       //创建笔记
@@ -106,13 +105,11 @@ class PopupNote extends React.Component<PopupNoteProps, PopupNoteState> {
         this.props.handleMessageBox(true);
         this.props.handleFetchNotes();
         this.props.handleMenuMode("highlight");
-        console.log("new");
       });
     }
   }
   handleClose = () => {
     let noteIndex = -1;
-    console.log(this.props.noteKey);
     if (this.props.noteKey) {
       this.props.notes.forEach((item, index) => {
         if (item.key === this.props.noteKey) {
@@ -127,7 +124,7 @@ class PopupNote extends React.Component<PopupNoteProps, PopupNoteState> {
           this.props.handleMessage("Delete Successfully");
           this.props.handleMessageBox(true);
           this.props.handleMenuMode("highlight");
-
+          this.props.handleFetchNotes();
           this.props.handleNoteKey("");
         });
       }

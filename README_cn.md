@@ -50,7 +50,7 @@
 
 备份数据到 **Dropbox** 和 **Webdav**
 
-你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步
+自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步
 
 双页模式，单页模式，滚动模式
 
@@ -63,8 +63,6 @@
 触控屏手势支持
 
 文字高亮和下划线标记
-
-简体中文，繁体中文，英文，多语言支持
 
 ## 使用方法
 
@@ -110,22 +108,16 @@ brew install --cask koodo-reader
 docker-compose up -d
 ```
 
-## 后续更新
-
-我会根据大家的反馈不定时更新，当有新版本更新时，您将自动收到更新提示
-
 ## 贡献
 
 | 贡献          | 感谢                                                                                       |
 | :------------ | :----------------------------------------------------------------------------------------- |
 | 繁体中文翻译  | [TobySkarting](https://github.com/TobySkarting), [playercd8](https://github.com/playercd8) |
+| 俄语翻译      | [vanja-san](https://github.com/vanja-san)                                                  |
 | Homebrew 安装 | [singularitti](https://github.com/singularitti)                                            |
+| Docker 安装   | [yanickxia](https://github.com/yanickxia)                                                  |
 | 其他贡献者    | [bamlan](https://github.com/bamlan)                                                        |
 
 ## 帮助
 
 您可以在[issue](https://github.com/troyeguo/koodo-reader/issues)提问，或者前往[这里](https://koodo.960960.xyz/support)了解更多。
-
-## 支持
-
-如果您觉得本项目对您有帮助的话，欢迎 star 本项目

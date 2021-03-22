@@ -166,6 +166,7 @@ class OperationPanel extends React.Component<
     if (this.state.isFullScreen) {
       this.handleExitFullScreen();
     }
+    this.props.handleReadingState(false);
     this.props.handleSearch(false);
     this.props.handleOpenMenu(false);
     ReadingTime.setTime(this.props.currentBook.key, this.props.time);
@@ -178,6 +179,10 @@ class OperationPanel extends React.Component<
         5,
         () => {}
       );
+    OtherUtil.setReaderConfig("windowWidth", document.body.clientWidth);
+    OtherUtil.setReaderConfig("windowHeight", document.body.clientHeight);
+    OtherUtil.setReaderConfig("windowX", window.screenX + "");
+    OtherUtil.setReaderConfig("windowY", window.screenY + "");
     setTimeout(() => {
       window.close();
     }, 200);

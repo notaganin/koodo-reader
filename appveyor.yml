@@ -9,6 +9,8 @@ image:
   - macos
   - Ubuntu
 
+stack: node 10
+
 cache:
   - node_modules
   - '%APPDATA%\npm-cache'
@@ -22,6 +24,12 @@ install:
   - git reset --hard HEAD
   - npm install
   - node --version
+
+before_build:
+  - node --version
+  - npm --version
+  - sh: sudo snap install snapcraft --classic
+  - sh: sudo apt-get install rpm
 
 build_script:
   - npm run release
