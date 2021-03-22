@@ -8,7 +8,7 @@ import { version } from "../../../../package.json";
 import OtherUtil from "../../../utils/otherUtil";
 import SyncUtil from "../../../utils/syncUtils/common";
 import { isElectron } from "react-device-detect";
-
+import BackupUtil from "../../../utils/syncUtils/backupUtil";
 class SettingDialog extends React.Component<
   SettingInfoProps,
   SettingInfoState
@@ -18,6 +18,7 @@ class SettingDialog extends React.Component<
     this.state = {
       language: OtherUtil.getReaderConfig("lang"),
       isTouch: OtherUtil.getReaderConfig("isTouch") === "yes",
+      isRememberSize: OtherUtil.getReaderConfig("isRememberSize") === "yes",
       isOpenBook: OtherUtil.getReaderConfig("isOpenBook") === "yes",
       isExpandContent: OtherUtil.getReaderConfig("isExpandContent") === "yes",
       isAutoSync: OtherUtil.getReaderConfig("isAutoSync") === "yes",
@@ -38,7 +39,21 @@ class SettingDialog extends React.Component<
         )
       ].setAttribute("selected", "selected");
   }
-
+  handleRest = (bool: boolean) => {
+    bool
+      ? this.props.handleMessage("Turn Off Successfully")
+      : this.props.handleMessage("Turn On Successfully");
+    this.props.handleMessageBox(true);
+    isElectron &&
+      BackupUtil.backup(
+        this.props.books,
+        this.props.notes,
+        this.props.bookmarks,
+        () => {},
+        5,
+        () => {}
+      );
+  };
   changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
     this.setState({ language: lng });
@@ -47,10 +62,7 @@ class SettingDialog extends React.Component<
   handleChangeTouch = () => {
     this.setState({ isTouch: !this.state.isTouch });
     OtherUtil.setReaderConfig("isTouch", this.state.isTouch ? "no" : "yes");
-    this.state.isTouch
-      ? this.props.handleMessage("Turn Off Successfully")
-      : this.props.handleMessage("Turn On Successfully");
-    this.props.handleMessageBox(true);
+    this.handleRest(this.state.isTouch);
   };
   handleJump = (url: string) => {
     isElectron
@@ -64,10 +76,7 @@ class SettingDialog extends React.Component<
       "isExpandContent",
       this.state.isExpandContent ? "no" : "yes"
     );
-    this.state.isExpandContent
-      ? this.props.handleMessage("Turn Off Successfully")
-      : this.props.handleMessage("Turn On Successfully");
-    this.props.handleMessageBox(true);
+    this.handleRest(this.state.isExpandContent);
   };
   handleAutoSync = () => {
     this.setState({ isAutoSync: !this.state.isAutoSync });
@@ -75,10 +84,7 @@ class SettingDialog extends React.Component<
       "isAutoSync",
       this.state.isAutoSync ? "no" : "yes"
     );
-    this.state.isAutoSync
-      ? this.props.handleMessage("Turn Off Successfully")
-      : this.props.handleMessage("Turn On Successfully");
-    this.props.handleMessageBox(true);
+    this.handleRest(this.state.isAutoSync);
   };
   handleChangeOpen = () => {
     this.setState({ isOpenBook: !this.state.isOpenBook });
@@ -86,10 +92,15 @@ class SettingDialog extends React.Component<
       "isOpenBook",
       this.state.isOpenBook ? "no" : "yes"
     );
-    this.state.isOpenBook
-      ? this.props.handleMessage("Turn Off Successfully")
-      : this.props.handleMessage("Turn On Successfully");
-    this.props.handleMessageBox(true);
+    this.handleRest(this.state.isOpenBook);
+  };
+  handleWindowSize = () => {
+    this.setState({ isRememberSize: !this.state.isRememberSize });
+    OtherUtil.setReaderConfig(
+      "isRememberSize",
+      this.state.isRememberSize ? "no" : "yes"
+    );
+    this.handleRest(this.state.isRememberSize);
   };
   handleChangeLocation = async () => {
     const { dialog } = window.require("electron").remote;
@@ -197,6 +208,37 @@ class SettingDialog extends React.Component<
               ></span>
             </span>
           </div>
+          {isElectron && (
+            <div className="setting-dialog-new-title">
+              <Trans>Remember window's size from last read</Trans>
+              <span
+                className="single-control-switch"
+                onClick={() => {
+                  this.handleWindowSize();
+                }}
+                style={
+                  this.state.isRememberSize
+                    ? { background: "rgba(46, 170, 220)", float: "right" }
+                    : { float: "right" }
+                }
+              >
+                <span
+                  className="single-control-button"
+                  style={
+                    this.state.isRememberSize
+                      ? {
+                          transform: "translateX(20px)",
+                          transition: "transform 0.5s ease",
+                        }
+                      : {
+                          transform: "translateX(0px)",
+                          transition: "transform 0.5s ease",
+                        }
+                  }
+                ></span>
+              </span>
+            </div>
+          )}
 
           <div className="setting-dialog-new-title">
             <Trans>Default expand all content</Trans>

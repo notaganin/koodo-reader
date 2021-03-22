@@ -1,7 +1,7 @@
 {
   "name": "koodo-reader",
   "main": "main.js",
-  "version": "1.2.2",
+  "version": "1.2.4",
   "description": "An open-source eBook reader ",
   "author": {
     "name": "App by Troye",
@@ -10,8 +10,6 @@
   "repository": "https://github.com/troyeguo/koodo-reader",
   "private": true,
   "dependencies": {
-    "@types/i18next": "^13.0.0",
-    "@types/react-i18next": "^8.1.0",
     "adm-zip": "^0.5.2",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
@@ -21,7 +19,7 @@
     "detect-port": "^1.3.0",
     "electron-is-dev": "^1.1.0",
     "express": "^4.17.1",
-    "express-fileupload": "^1.2.0",
+    "express-fileupload": "^1.2.1",
     "font-list": "^1.2.11",
     "fs-extra": "^9.1.0",
     "i18next": "^19.4.4",
@@ -57,8 +55,8 @@
   },
   "homepage": "./",
   "build": {
-    "appId": "koodo.960960.xyz",
-    "productName": "KoodoReader",
+    "appId": "xyz.960960.koodo",
+    "productName": "Koodo Reader",
     "copyright": "Copyright (c) 2020-2021 ${author}",
     "files": [
       "build/**/*",
@@ -72,6 +70,33 @@
     "publish": {
       "provider": "github"
     },
+    "fileAssociations": [
+      {
+        "ext": "epub",
+        "role": "Viewer",
+        "mimeType": "application/epub+zip"
+      },
+      {
+        "ext": "pdf",
+        "role": "Viewer",
+        "mimeType": "application/pdf"
+      },
+      {
+        "ext": "mobi",
+        "role": "Viewer",
+        "mimeType": "application/x-mobipocket-ebook"
+      },
+      {
+        "ext": "azw3",
+        "role": "Viewer",
+        "mimeType": "application/vnd.amazon.ebook"
+      },
+      {
+        "ext": "txt",
+        "role": "Viewer",
+        "mimeType": "text/plain"
+      }
+    ],
     "extends": null,
     "dmg": {
       "contents": [
@@ -89,14 +114,38 @@
       ]
     },
     "mac": {
+      "target": "dmg",
+      "arch": [
+        "x64",
+        "arm64"
+      ],
       "icon": "assets/icons/icon.icns",
       "category": "public.app-category.productivity",
       "artifactName": "${productName}-${version}.${ext}"
     },
     "win": {
       "target": [
-        "nsis",
-        "portable"
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
       ],
       "icon": "assets/icons/icon.ico",
       "artifactName": "${productName}-${version}.${ext}",
@@ -105,15 +154,19 @@
     "linux": {
       "icon": "assets/icons",
       "category": "Office",
-      "target": "AppImage"
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm",
+        "snap"
+      ]
     },
     "portable": {
       "artifactName": "${productName}-${version}-Portable.${ext}"
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "deleteAppDataOnUninstall": true
+      "allowToChangeInstallationDirectory": true
     }
   },
   "eslintConfig": {
@@ -142,6 +195,8 @@
     ]
   },
   "devDependencies": {
+    "@types/i18next": "^13.0.0",
+    "@types/react-i18next": "^8.1.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -158,7 +213,7 @@
     "classnames": "^2.2.6",
     "concurrently": "^5.0.1",
     "cross-env": "^6.0.3",
-    "electron": "^7.1.4",
+    "electron": "7.1.4",
     "electron-builder": "^22.3.6",
     "electron-is-dev": "^1.1.0",
     "file-saver": "^2.0.2",

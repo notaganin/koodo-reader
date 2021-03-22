@@ -85,7 +85,6 @@
   "Coming Soon": "Скоро выйдет",
   "Authorize Successfully": "Авторизация завершена",
   "Authorize Failed": "Ошибка авторизации",
-  "You can turn off this tab now": "Вы можете отключить эту вкладку сейчас",
   "Do you want to backup or restore?": "Выберите вашу операцию",
   "Where is your data?": "Где ваши данные?",
   "Where to keep your data?": "Где хранить ваши данные?",
@@ -172,7 +171,7 @@
   "Margin": "Края",
   "Open link in browser": "Скачать",
   "Do you want to open this link in browser": "Вы хотите открыть эту ссылку в браузере?",
-  "Webdav Info": "Webdav - это простое в использовании и эффективное решение для резервного копирования, мы рекомендуем использовать сервис webdav, предоставляемый jianguoyun.",
+  "Webdav Info": "Webdav - это простое в использовании и эффективное решение для резервного копирования, мы рекомендуем использовать сервис webdav, предоставляемый NextCloud.",
   "Please Wait a moment": "Ожидайте",
   "Server Address": "Адрес сервера",
   "Username": "Имя пользователя",
@@ -231,5 +230,7 @@
   "Unauthorize": "Неавторизирован",
   "Unauthorize Successfully": "Неавторизировано",
   "Built-in font": "Built-in font",
+  "Letter Spacing": "Letter Spacing",
+  "Remember window's size from last read": "Remember window's size",
   "View Mode": "View Mode"
 }
