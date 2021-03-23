@@ -7,6 +7,10 @@
     "name": "App by Troye",
     "email": "guo362429@gmail.com"
   },
+  "engines": {
+    "node": ">=10.0.0",
+    "npm": ">=6.0.0"
+  },
   "repository": "https://github.com/troyeguo/koodo-reader",
   "private": true,
   "dependencies": {
@@ -114,14 +118,18 @@
       ]
     },
     "mac": {
-      "target": "dmg",
-      "arch": [
-        "x64",
-        "arm64"
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ],
       "icon": "assets/icons/icon.icns",
       "category": "public.app-category.productivity",
-      "artifactName": "${productName}-${version}.${ext}"
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "win": {
       "target": [
@@ -155,10 +163,12 @@
       "icon": "assets/icons",
       "category": "Office",
       "target": [
-        "AppImage",
-        "deb",
-        "rpm",
-        "snap"
+        {
+          "target": "AppImage"
+        },
+        {
+          "target": "deb"
+        }
       ]
     },
     "portable": {
@@ -166,7 +176,8 @@
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": true
     }
   },
   "eslintConfig": {
@@ -213,8 +224,8 @@
     "classnames": "^2.2.6",
     "concurrently": "^5.0.1",
     "cross-env": "^6.0.3",
-    "electron": "7.1.4",
-    "electron-builder": "^22.3.6",
+    "electron": "11.3.0",
+    "electron-builder": "^22.10.5",
     "electron-is-dev": "^1.1.0",
     "file-saver": "^2.0.2",
     "html-react-parser": "^0.13.0",
