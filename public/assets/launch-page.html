@@ -22,7 +22,7 @@
         position: relative;
       }
       .logo {
-        width: 180px;
+        width: 150px;
         margin: 10px;
       }
       .writer {
@@ -41,11 +41,12 @@
       }
       .launching {
         font-size: 19px;
-        font-weight: bold;
+        font-weight: 600;
         line-height: 32px;
         color: #000000;
         margin-left: 10px;
         margin-bottom: 5px;
+        opacity: 0;
       }
       .progress-container {
         position: absolute;
@@ -80,7 +81,7 @@
   <body>
     <div class="launch-box">
       <div class="shadow-box">
-        <img src="splash.png" alt="" class="logo" />
+        <img src="logo.png" alt="" class="logo" />
         <p class="words"></p>
         <div class="progress-container">
           <span class="launching">启动中</span>
@@ -93,10 +94,12 @@
     </div>
     <script>
       let words = [
-        "悲伤的情绪是一张向两面观望着的脸，一面朝着恐怖，一面朝着怜悯，而这两者都不过是它的两个不同的阶段。",
-        "我曾努力过，去爱上帝。他最后说道。不过现在看来，我失败了。那样做很难。我曾努力一点一点地把自己的意志同上帝的意志结合起来，也不是完全没有办到，或许我会继续这么做。",
-        "我几乎没有耐心来严肃地生活，既然这正儿八经的生活挡在我和我的愿望中间，那在我看来它就好像是儿戏，丑陋单调的儿戏。",
-        "我除了几句日常客气话，再没有对她说过什么，可是她的名字却像一声呼唤，会调动我全身血液喷发愚蠢的激情。",
+        "人类一向有这个独特之处：它保留了两套法则——一套私下的，一套真正的；一套公开的，一套矫揉造作的。",
+        "人類中絕大多數人，不論是野蠻的或是文明的，在暗地裡都是心地善良和畏畏縮縮地不敢叫人受苦的人，可是當著一小撮專事侵略和殘酷無情的人面前，他們就不敢固執己見。",
+        "If you take care of a hungry dog, give it food, and let it live a good life, this dog will never bite you back. This is the main difference between a dog and a human being.",
+        "Танцы, как будто никто не смотрит; страстно влюблен, как будто никогда не болит; поют так, как будто никто не слушает; живя, относитесь к миру как к раю.",
+        "这些贵妇仿佛一大片花海，五光十色，灿烂耀眼，她们身上的钻石熠熠生辉，连成一片，仿佛天上的银河。",
+        "永远要像你不需要金钱那样地工作，永远要像你不曾被伤害过那样地爱，永远要像没有人在注视你那样地跳舞，永远要像在天堂那样地生活。",
       ];
       let number = Math.floor(Math.random() * words.length);
       let word = words[number];
